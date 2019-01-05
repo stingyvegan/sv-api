@@ -1,0 +1,29 @@
+{
+  "name": "stingyvegan-api",
+  "version": "0.0.1",
+  "description": "Backend rest/websocket server for Stingy Vegan web application",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "npx babel src --out-dir lib",
+    "start": "nodemon --exec babel-node src/index.js",
+    "serve": "node lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/stingyvegan/stingyvegan-api.git"
+  },
+  "author": "Daniel Emery <danielremery@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://bitbucket.org/stingyvegan/stingyvegan-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "nodemon": "^1.18.9"
+  }
+}
