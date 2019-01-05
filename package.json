@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npx babel src --out-dir lib",
+    "lint": "npx eslint src",
     "start": "nodemon --exec babel-node src/index.js",
     "serve": "node lib/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +25,12 @@
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "nodemon": "^1.18.9"
   }
 }
