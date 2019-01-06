@@ -1,6 +1,7 @@
 module.exports = {
-  extends: "airbnb-base",
+  extends: 'airbnb-base',
   rules: {
-    "no-var": 1,
+    'no-var': 1,
+    'arrow-body-style': 'always',
   },
 };
