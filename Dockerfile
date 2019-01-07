@@ -11,7 +11,7 @@ FROM node:8-alpine
 
 RUN mkdir -p /usr/dist
 WORKDIR /usr/dist
-COPY --from=build /usr/build/lib .
+COPY --from=build /usr/build/lib ./lib
+COPY --from=build /usr/build/node_modules ./node_modules
 
-EXPOSE 5000
 CMD ["node", "lib/index.js"]
