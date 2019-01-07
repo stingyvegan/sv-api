@@ -18,6 +18,7 @@
   "license": "UNLICENSED",
   "homepage": "https://bitbucket.org/stingyvegan/stingyvegan-api#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "cognito-express": "^2.0.14",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",

@@ -1,11 +1,10 @@
-import express from 'express';
+import bodyParser from 'body-parser';
 import CognitoExpress from 'cognito-express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
 
 import mockStore from './mock_store';
-
-import awsExports from './aws-exports';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -13,8 +12,8 @@ const app = express();
 const authenticatedRoute = express.Router();
 
 const cognitoExpress = new CognitoExpress({
-  region: awsExports.aws_region,
-  cognitoUserPoolId: awsExports.aws_user_pools_id,
+  region: process.env.AWS_REGION,
+  cognitoUserPoolId: process.env.AWS_USER_POOLS_ID,
   tokenUse: 'access',
   tokenExpiration: 3600000,
 });
@@ -23,6 +22,8 @@ const corsOptions = {
   origin: process.env.CLIENT_URL,
 };
 app.use(cors(corsOptions));
+
+app.use(bodyParser.json());
 
 app.use('/api', authenticatedRoute);
 
@@ -49,7 +50,9 @@ authenticatedRoute.get('/products', (req, res) => {
 });
 
 authenticatedRoute.put('/orders', (req, res) => {
+  mockStore.addOrder(req.body);
   res.status(200);
+  res.send();
 });
 
 app.listen(port, () => {
