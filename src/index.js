@@ -3,13 +3,13 @@ import CognitoExpress from 'cognito-express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import expressWs from 'express-ws';
 
 import mockStore from './mock_store';
 
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
-const authenticatedRoute = express.Router();
 
 const cognitoExpress = new CognitoExpress({
   region: process.env.AWS_REGION,
@@ -22,15 +22,18 @@ const corsOptions = {
   origin: process.env.CLIENT_URL,
 };
 app.use(cors(corsOptions));
-
 app.use(bodyParser.json());
+expressWs(app);
 
+const authenticatedRoute = express.Router();
 app.use('/api', authenticatedRoute);
-
 authenticatedRoute.use((req, res, next) => {
   const accessTokenFromClient = req.headers.authorization
     ? req.headers.authorization.replace('Bearer ', '')
+    : req.query.Authorization
+    ? req.query.Authorization.replace('Bearer ', '')
     : '';
+
   cognitoExpress.validate(accessTokenFromClient, (err, response) => {
     if (err) {
       return res.status(401).send(err);
@@ -53,6 +56,22 @@ authenticatedRoute.put('/orders', (req, res) => {
   mockStore.addOrder(req.body);
   res.status(200);
   res.send();
+});
+
+authenticatedRoute.ws('/ordersChanged', function(ws, req) {
+  try {
+    setInterval(
+      () =>
+        ws.send(
+          JSON.stringify({
+            type: 'ORDER_UPDATED',
+          }),
+        ),
+      10000,
+    );
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 app.listen(port, () => {
