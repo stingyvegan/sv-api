@@ -58,17 +58,23 @@ authenticatedRoute.put('/orders', (req, res) => {
   res.send();
 });
 
-authenticatedRoute.ws('/ordersChanged', function(ws, req) {
+authenticatedRoute.ws('/productChanges', function(ws, req) {
+  let test = 0;
+  let interval;
+  ws.on('close', () => {
+    clearInterval(interval);
+  });
   try {
-    setInterval(
-      () =>
-        ws.send(
-          JSON.stringify({
-            type: 'ORDER_UPDATED',
-          }),
-        ),
-      10000,
-    );
+    interval = setInterval(() => {
+      ws.send(
+        JSON.stringify({
+          type: 'PRODUCT_CHANGED',
+          batchId: 'batch1',
+          updatedCommitted: test,
+        }),
+      );
+      test += 5;
+    }, 10000);
   } catch (e) {
     console.error(e);
   }
