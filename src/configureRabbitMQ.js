@@ -5,9 +5,9 @@ export default async function configureRabbitMQ() {
   const publishers = {};
 
   try {
-    const rabbitUrl = `${process.env.RABBIT_MQ_HOST}:${
-      process.env.RABBIT_MQ_PORT
-    }`;
+    const rabbitUrl = `amqp://${process.env.RABBIT_MQ_USER}:${
+      process.env.RABBIT_MQ_PASS
+    }@${process.env.RABBIT_MQ_HOST}:${process.env.RABBIT_MQ_PORT}`;
     console.log(`connecting to RabbitMQ @ ${rabbitUrl}`);
     const connection = await amqp.connect(rabbitUrl);
 
