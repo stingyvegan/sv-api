@@ -36,8 +36,9 @@ configureRabbitMQ().then(function(mq) {
   });
 
   authenticatedRoute.ws('/productChanges', function(ws, req) {
+    let queue;
     ws.on('close', () => {
-      console.log('not handled...');
+      mq.cancelListen(queue, 'product_updates');
     });
 
     try {
@@ -49,6 +50,8 @@ configureRabbitMQ().then(function(mq) {
             updatedCommitted: message.updatedCommitted,
           }),
         );
+      }).then(function(q) {
+        queue = q;
       });
     } catch (e) {
       console.error(e);

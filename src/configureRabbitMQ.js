@@ -27,20 +27,31 @@ export default async function configureRabbitMQ() {
       }
     }
 
-    async function listen(exchange, routingKey, onMessage) {
+    async function listen(exchange, routingKey, onMessage, onClose) {
       const channel = await connection.createChannel();
       channel.assertExchange(exchange, 'topic', { durable: false });
       const queue = await channel.assertQueue('', { exclusive: true });
       channel.bindQueue(queue.queue, exchange, routingKey);
       channel.consume(queue.queue, function(message) {
-        const data = JSON.parse(message.content.toString());
-        onMessage(data);
+        if (message) {
+          const data = JSON.parse(message.content.toString());
+          onMessage(data);
+        } else {
+          if (onClose) onClose();
+        }
       });
+      return queue.queue;
+    }
+
+    async function cancelListen(queue) {
+      const channel = await connection.createChannel();
+      channel.deleteQueue(queue);
     }
 
     return {
       publish,
       listen,
+      cancelListen,
     };
   } catch (err) {
     console.error(err);
