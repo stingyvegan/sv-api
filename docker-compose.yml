@@ -1,0 +1,17 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 8080:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: sv
+      RABBITMQ_DEFAULT_PASS: sv
+  mysql:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: local
