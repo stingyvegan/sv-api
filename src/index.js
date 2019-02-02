@@ -5,7 +5,6 @@ import addMiddlewares from './addMiddlewares';
 import addAuthenticatedRoute from './addAuthenticatedRoute';
 import configureRabbitMQ from './configureRabbitMQ';
 import configureSequelize from './configureSequelize';
-import mockStore from './mock_store';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -95,10 +94,12 @@ Promise.all([configureRabbitMQ(), configureSequelize()])
       });
     });
 
-    authenticatedRoute.ws('/productChanges', function(ws, req) {
-      let queue;
+    authenticatedRoute.ws('/ws', function(ws, req) {
+      let queues = [];
       ws.on('close', () => {
-        mq.cancelListen(queue, 'product_updates');
+        queues.forEach(q => {
+          mq.cancelListen(q);
+        });
       });
 
       try {
@@ -111,7 +112,7 @@ Promise.all([configureRabbitMQ(), configureSequelize()])
             }),
           );
         }).then(function(q) {
-          queue = q;
+          queues.push(q);
         });
       } catch (e) {
         console.error(e);

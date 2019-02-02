@@ -9,6 +9,7 @@ export default async function configureSequelize() {
     {
       host: process.env.MYSQL_HOST,
       dialect: 'mysql',
+      logging: false,
     },
   );
 
@@ -48,53 +49,6 @@ export default async function configureSequelize() {
     Batch.sync(),
     Order.sync(),
   ]);
-
-  // await Promise.all([
-  //   Supplier.destroy({
-  //     where: {},
-  //   }),
-  //   Product.destroy({
-  //     where: {},
-  //   }),
-  //   Batch.destroy({
-  //     where: {},
-  //   }),
-  //   Order.destroy({
-  //     where: {},
-  //   }),
-  // ]);
-
-  // const supplier = await Supplier.create({
-  //   name: 'Vegan Perfection',
-  // });
-  // const supplier2 = await Supplier.create({
-  //   name: 'Honest To Goodness',
-  // });
-
-  // const prod = await Product.create({
-  //   name: 'Vego Bars',
-  //   isDiscrete: true,
-  //   unitSize: 1,
-  //   unitName: 'bar',
-  //   requiredUnits: 60,
-  //   totalCost: 36000,
-  // });
-  // await supplier.setProducts([prod]);
-
-  // const prod2 = await Product.create({
-  //   name: 'Nutritional Yeast',
-  //   isDiscrete: false,
-  //   unitSize: 100,
-  //   unitName: 'g',
-  //   requiredUnits: 20,
-  //   totalCost: 4500,
-  // });
-  // await supplier2.setProducts([prod2]);
-
-  // const batch = await Batch.create({});
-  // await prod.setBatches([batch]);
-  // const batch2 = await Batch.create({});
-  // await prod2.setBatches([batch2]);
 
   return {
     connection,
