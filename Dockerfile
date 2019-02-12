@@ -14,4 +14,4 @@ WORKDIR /usr/dist
 COPY --from=build /usr/build/lib ./lib
 COPY --from=build /usr/build/node_modules ./node_modules
 
-CMD ["node", "lib/index.js"]
+CMD ["npm", "run", "serve"]
