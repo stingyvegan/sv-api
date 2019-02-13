@@ -14,6 +14,7 @@ WORKDIR /usr/dist
 COPY --from=build /usr/build/lib ./lib
 COPY --from=build /usr/build/node_modules ./node_modules
 COPY --from=build /usr/build/config ./config
+COPY --from=build /usr/build/models ./models
 COPY --from=build /usr/build/migrations ./migrations
 COPY --from=build /usr/build/seeders ./seeders
 
