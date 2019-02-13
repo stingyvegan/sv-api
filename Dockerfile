@@ -13,5 +13,6 @@ RUN mkdir -p /usr/dist
 WORKDIR /usr/dist
 COPY --from=build /usr/build/lib ./lib
 COPY --from=build /usr/build/node_modules ./node_modules
+COPY --from=build /usr/build/config ./config
 
-CMD ["npm", "run", "serve"]
+CMD ["sh", "-c", "node node_modules/.bin/sequelize db:migrate && node lib/index.js"]
