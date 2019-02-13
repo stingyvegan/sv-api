@@ -14,5 +14,7 @@ WORKDIR /usr/dist
 COPY --from=build /usr/build/lib ./lib
 COPY --from=build /usr/build/node_modules ./node_modules
 COPY --from=build /usr/build/config ./config
+COPY --from=build /usr/build/migrations ./migrations
+COPY --from=build /usr/build/seeders ./seeders
 
 CMD ["sh", "-c", "node node_modules/.bin/sequelize db:migrate && node lib/index.js"]
