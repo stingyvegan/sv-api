@@ -23,6 +23,7 @@
     "cognito-express": "^2.0.14",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
+    "easy-rbac": "^3.1.0",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
     "mysql2": "^1.6.4",

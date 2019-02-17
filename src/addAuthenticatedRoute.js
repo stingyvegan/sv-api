@@ -1,5 +1,6 @@
 import CognitoExpress from 'cognito-express';
 import express from 'express';
+import { getRoles } from './helpers/cognito';
 
 export default function addAuthenticatedRoute(app) {
   const cognitoExpress = new CognitoExpress({
@@ -23,7 +24,10 @@ export default function addAuthenticatedRoute(app) {
         return res.status(401).send(err);
       }
 
-      res.locals.user = response;
+      res.locals.sc = {
+        username: response.username,
+        roles: getRoles(response),
+      };
       return next();
     });
   });
