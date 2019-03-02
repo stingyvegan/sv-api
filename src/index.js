@@ -6,7 +6,7 @@ import addAuthenticatedRoute from './addAuthenticatedRoute';
 import mq from './rabbitmq';
 import configureSequelize from './configureSequelize';
 
-import { addOrder, getOrders } from './services/orders';
+import { addOrder, getMyOrders, getActiveOrders } from './services/orders';
 import { getProducts } from './services/products';
 
 dotenv.config();
@@ -19,8 +19,16 @@ addErrorHandlers(app);
 
 Promise.all([mq.configureRabbitMQ(), configureSequelize()])
   .then(() => {
+    authenticatedRoute.get('/orders/my', (req, res, next) => {
+      getMyOrders(res.locals.sc)
+        .then(orders => {
+          res.send(orders);
+        })
+        .catch(err => next(err));
+    });
+
     authenticatedRoute.get('/orders', (req, res, next) => {
-      getOrders(res.locals.sc)
+      getActiveOrders(res.locals.sc)
         .then(orders => {
           res.send(orders);
         })

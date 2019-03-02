@@ -5,7 +5,7 @@ const options = {
     can: ['orders:get:my', 'products:get:active'],
   },
   admin: {
-    can: [],
+    can: ['orders:get:active'],
     inherits: ['basic'],
   },
 };

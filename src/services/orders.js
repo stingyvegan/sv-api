@@ -38,13 +38,22 @@ export async function addOrder(sc, newOrder) {
   });
 }
 
-export async function getOrders(sc) {
+export async function getMyOrders(sc) {
   if (await rbac.can(sc.roles, 'orders:get:my')) {
     const orders = await Order.findAll({
       where: {
         username: sc.username,
       },
     });
+    return orders;
+  } else {
+    throw new UnauthorisedError();
+  }
+}
+
+export async function getActiveOrders(sc) {
+  if (await rbac.can(sc.roles, 'orders:get:active')) {
+    const orders = await Order.findAll({});
     return orders;
   } else {
     throw new UnauthorisedError();
