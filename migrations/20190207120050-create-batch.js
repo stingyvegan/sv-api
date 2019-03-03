@@ -1,27 +1,27 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Batches', {
-      id: {
+    return queryInterface.createTable('batch', {
+      batch_id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      productId: {
+      product_id: {
         type: Sequelize.UUID,
-        references: { model: 'Products', key: 'id' },
+        references: { model: 'product', key: 'product_id' },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Batches');
+    return queryInterface.dropTable('batch');
   },
 };

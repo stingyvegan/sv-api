@@ -3,17 +3,23 @@ module.exports = (sequelize, DataTypes) => {
   const Batch = sequelize.define(
     'Batch',
     {
-      id: {
+      batchId: {
         type: DataTypes.UUID,
         primaryKey: true,
       },
       productId: DataTypes.UUID,
     },
-    {},
+    {
+      freezeTableName: true,
+      tableName: 'batch',
+      underscored: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
   );
   Batch.associate = function(models) {
-    Batch.belongsTo(models.Product);
-    Batch.hasMany(models.Order);
+    Batch.belongsTo(models.Product, { foreignKey: 'product_id' });
+    Batch.hasMany(models.Order, { foreignKey: 'batch_id' });
   };
   return Batch;
 };

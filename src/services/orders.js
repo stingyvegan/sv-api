@@ -14,11 +14,7 @@ export async function addOrder(sc, newOrder) {
   });
   const [batch, order] = await Promise.all([
     Batch.findByPk(newOrder.batchId),
-    Order.create({
-      id: newOrder.id,
-      username: newOrder.username,
-      committed: newOrder.committed,
-    }),
+    Order.create(newOrder),
   ]);
   await batch.addOrder(order);
   const updatedProduct = await Batch.findByPk(newOrder.batchId, {

@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define(
     'Product',
     {
-      id: {
+      productId: {
         type: DataTypes.UUID,
         primaryKey: true,
       },
@@ -15,11 +15,17 @@ module.exports = (sequelize, DataTypes) => {
       totalCost: DataTypes.INTEGER,
       supplierId: DataTypes.UUID,
     },
-    {},
+    {
+      freezeTableName: true,
+      tableName: 'product',
+      underscored: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
   );
   Product.associate = function(models) {
-    Product.belongsTo(models.Supplier);
-    Product.hasMany(models.Batch);
+    Product.belongsTo(models.Supplier, { foreignKey: 'supplier_id' });
+    Product.hasMany(models.Batch, { foreignKey: 'product_id' });
   };
   return Product;
 };

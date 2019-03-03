@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Products', {
-      id: {
+    return queryInterface.createTable('product', {
+      product_id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
@@ -10,36 +10,36 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      isDiscrete: {
+      is_discrete: {
         type: Sequelize.BOOLEAN,
       },
-      unitSize: {
+      unit_size: {
         type: Sequelize.SMALLINT,
       },
-      unitName: {
+      unit_name: {
         type: Sequelize.STRING,
       },
-      requiredUnits: {
+      required_units: {
         type: Sequelize.SMALLINT,
       },
-      totalCost: {
+      total_cost: {
         type: Sequelize.INTEGER,
       },
-      supplierId: {
+      supplier_id: {
         type: Sequelize.UUID,
-        references: { model: 'Suppliers', key: 'id' },
+        references: { model: 'supplier', key: 'supplier_id' },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Products');
+    return queryInterface.dropTable('product');
   },
 };
