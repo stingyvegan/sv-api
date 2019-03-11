@@ -6,8 +6,12 @@ import addAuthenticatedRoute from './addAuthenticatedRoute';
 import mq from './rabbitmq';
 import configureSequelize from './configureSequelize';
 
-import { addOrder, getMyOrders, getActiveOrders } from './services/orders';
-import { getProducts } from './services/products';
+import {
+  addOrder,
+  getMyOrders,
+  getActiveOrders,
+} from './services/orders/orders.service';
+import { getProducts } from './services/products/products.service';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -45,9 +49,9 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
 
     authenticatedRoute.put('/orders', (req, res, next) => {
       addOrder(res.locals.sc, req.body)
-        .then(() => {
+        .then(createdOrder => {
           res.status(200);
-          res.send();
+          res.send(createdOrder);
         })
         .catch(err => next(err));
     });

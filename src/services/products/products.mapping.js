@@ -1,3 +1,8 @@
+/**
+ * Map a batch record from sequelize to a record to be sent to the client.
+ * Must have Product and Orders included.
+ * @param {*} record The Batch record to be mapped.
+ */
 export const mapProduct = record => {
   return {
     name: record.Product.name,

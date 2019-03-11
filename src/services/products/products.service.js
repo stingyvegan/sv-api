@@ -1,8 +1,8 @@
-import rbac from '../rbac';
-import { Batch, Order, Product, Supplier } from '../../models';
-import { mapProduct } from '../helpers/product';
+import rbac from '../../rbac';
+import { Batch, Order, Product, Supplier } from '../../../models';
+import { mapProduct } from './products.mapping';
 
-import { UnauthorisedError } from '../errors';
+import { UnauthorisedError } from '../../errors';
 
 export async function getProducts(sc) {
   if (await rbac.can(sc.roles, 'products:get:active')) {
@@ -15,7 +15,9 @@ export async function getProducts(sc) {
         Order,
       ],
     });
-    return records.map(mapProduct);
+    return records
+      .map(mapProduct)
+      .filter(f => f.totalCommitted < f.requiredUnits);
   } else {
     throw new UnauthorisedError();
   }
