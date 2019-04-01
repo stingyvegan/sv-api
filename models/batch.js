@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Batch.associate = function(models) {
     Batch.belongsTo(models.Product, { foreignKey: 'product_id' });
-    Batch.hasMany(models.Order, { foreignKey: 'batch_id' });
+    Batch.hasMany(models.BatchOrder, { foreignKey: 'batch_id' });
   };
   return Batch;
 };

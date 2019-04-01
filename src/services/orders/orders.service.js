@@ -1,45 +1,76 @@
 import rbac from '../../rbac';
-import { Batch, Order, Product, Supplier } from '../../../models';
-import { mapProduct } from '../products/products.mapping';
+import { BatchOrder, Batch, Order, sequelize } from '../../../models';
 import { mapOrder } from './orders.mapping';
 import mq from '../../rabbitmq';
 
+import * as productService from '../products/products.service';
+
 import { UnauthorisedError } from '../../errors';
 
-export async function addOrder(sc, newOrder) {
-  rbac.can(sc.roles, 'products:get:active').then(p => {
-    if (p) {
-    } else {
-      res.sendStatus(403);
-    }
-  });
-  const [batch, order] = await Promise.all([
-    Batch.findByPk(newOrder.batchId),
-    Order.create(newOrder),
-  ]);
-  await batch.addOrder(order);
-  const createdOrder = await Order.findByPk(newOrder.orderId, {
+const orderInclude = [
+  {
+    model: BatchOrder,
     include: [
       {
         model: Batch,
-        include: [
-          {
-            model: Product,
-            include: [Supplier],
-          },
-          Order,
-        ],
+        include: [BatchOrder],
       },
     ],
-  });
-  const mapped = mapOrder(createdOrder);
+  },
+];
 
-  await mq.publish('product_updates', '', {
-    batchId: mapped.batchId,
-    updatedCommitted: mapped.product.totalCommitted,
-  });
+export async function addOrder(sc, newOrder) {
+  if (await rbac.can(sc.roles, 'orders:order:my')) {
+    await sequelize.transaction(async t => {
+      // Add the order and any new batches
+      const orderPromise = Order.create(
+        {
+          orderId: newOrder.orderId,
+          username: newOrder.username,
+        },
+        { transaction: t },
+      );
+      const batchPromises = newOrder.batchOrders
+        .filter(bo => bo.existingCommitted === 0)
+        .map(bo =>
+          Batch.create(
+            {
+              batchId: bo.batchId,
+              productId: newOrder.productId,
+            },
+            { transaction: t },
+          ),
+        );
+      await Promise.all([orderPromise, ...batchPromises]);
 
-  return mapped;
+      // Add the batchOrder records
+      return await Promise.all(
+        newOrder.batchOrders.map(bo =>
+          BatchOrder.create(
+            {
+              batchId: bo.batchId,
+              orderId: newOrder.orderId,
+              committed: bo.committed,
+            },
+            { transaction: t },
+          ),
+        ),
+      );
+    });
+
+    // Get the updated product and publish the change message
+    const product = await productService.getProduct(sc, newOrder.productId);
+    await mq.publish('product_updates', '', product);
+
+    // Get the updated order and return
+    const createdOrder = await Order.findByPk(newOrder.orderId, {
+      include: orderInclude,
+    });
+    const mapped = mapOrder(createdOrder);
+    return mapped;
+  } else {
+    throw new UnauthorisedError();
+  }
 }
 
 export async function getMyOrders(sc) {
@@ -48,18 +79,8 @@ export async function getMyOrders(sc) {
       where: {
         username: sc.username,
       },
-      include: [
-        {
-          model: Batch,
-          include: [
-            {
-              model: Product,
-              include: [Supplier],
-            },
-            Order,
-          ],
-        },
-      ],
+      include: orderInclude,
+      order: [['created_at', 'DESC']],
     });
     return orders.map(mapOrder);
   } else {
@@ -70,18 +91,8 @@ export async function getMyOrders(sc) {
 export async function getActiveOrders(sc) {
   if (await rbac.can(sc.roles, 'orders:get:active')) {
     const orders = await Order.findAll({
-      include: [
-        {
-          model: Batch,
-          include: [
-            {
-              model: Product,
-              include: [Supplier],
-            },
-            Order,
-          ],
-        },
-      ],
+      include: orderInclude,
+      order: [['created_at', 'DESC']],
     });
     return orders.map(mapOrder);
   } else {

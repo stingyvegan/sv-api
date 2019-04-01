@@ -1,22 +1,34 @@
+function sumCommitted(batchOrders) {
+  return batchOrders.reduce((acc, bo) => {
+    return acc + bo.committed;
+  }, 0);
+}
+
 /**
  * Map a batch record from sequelize to a record to be sent to the client.
  * Must have Product and Orders included.
  * @param {*} record The Batch record to be mapped.
  */
-export const mapProduct = record => {
+export function mapProduct(record) {
+  const currentBatch = record.Batches.find(batch => {
+    return sumCommitted(batch.BatchOrders) < record.requiredUnits;
+  });
+
+  const totalCommitted = currentBatch
+    ? sumCommitted(currentBatch.BatchOrders)
+    : 0;
+
   return {
-    name: record.Product.name,
-    batchId: record.batchId,
-    productId: record.Product.productId,
-    isDiscrete: record.Product.isDiscrete,
-    unitSize: record.Product.unitSize,
-    unitName: record.Product.unitName,
-    requiredUnits: record.Product.requiredUnits,
-    totalCost: record.Product.totalCost,
-    supplierId: record.Product.Supplier.supplierId,
-    supplierName: record.Product.Supplier.name,
-    totalCommitted: record.Orders.reduce((sum, order) => {
-      return (sum += order.committed);
-    }, 0),
+    name: record.name,
+    productId: record.productId,
+    isDiscrete: record.isDiscrete,
+    unitSize: record.unitSize,
+    unitName: record.unitName,
+    requiredUnits: record.requiredUnits,
+    totalCost: record.totalCost,
+    supplierId: record.Supplier.supplierId,
+    supplierName: record.Supplier.name,
+    totalCommitted,
+    currentBatch: (currentBatch || { batchId: null }).batchId,
   };
-};
+}

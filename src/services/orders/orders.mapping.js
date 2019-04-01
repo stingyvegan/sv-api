@@ -1,4 +1,20 @@
-import { mapProduct } from '../products/products.mapping';
+const mapBatch = record => {
+  return {
+    batchId: record.batchId,
+    productId: record.productId,
+    totalCommitted: record.BatchOrders.reduce((acc, bo) => {
+      return acc + bo.committed;
+    }, 0),
+  };
+};
+
+const mapBatchOrder = record => {
+  const result = {
+    committed: record.committed,
+    batch: mapBatch(record.Batch),
+  };
+  return result;
+};
 
 /**
  * Map an order record from sequelize to a record to be sent to the client.
@@ -7,11 +23,10 @@ import { mapProduct } from '../products/products.mapping';
  */
 export const mapOrder = record => {
   const result = {
-    product: mapProduct(record.Batch),
     username: record.username,
-    batchId: record.batchId,
     orderId: record.orderId,
-    committed: record.committed,
+    orderDate: record.created_at,
+    batchOrders: record.BatchOrders.map(mapBatchOrder),
   };
   return result;
 };

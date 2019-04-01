@@ -8,8 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       username: DataTypes.STRING,
-      committed: DataTypes.SMALLINT,
-      batchId: DataTypes.UUID,
     },
     {
       freezeTableName: true,
@@ -20,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   Order.associate = function(models) {
-    Order.belongsTo(models.Batch, { foreignKey: 'batch_id' });
+    Order.hasMany(models.BatchOrder, { foreignKey: 'order_id' });
   };
   return Order;
 };

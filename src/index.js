@@ -11,7 +11,7 @@ import {
   getMyOrders,
   getActiveOrders,
 } from './services/orders/orders.service';
-import { getProducts } from './services/products/products.service';
+import { getProduct, getProducts } from './services/products/products.service';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -47,6 +47,15 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         .catch(err => next(err));
     });
 
+    authenticatedRoute.get('/products/:productId', (req, res, next) => {
+      const { productId } = req.params;
+      getProduct(res.locals.sc, productId)
+        .then(product => {
+          res.send(product);
+        })
+        .catch(err => next(err));
+    });
+
     authenticatedRoute.put('/orders', (req, res, next) => {
       addOrder(res.locals.sc, req.body)
         .then(createdOrder => {
@@ -68,8 +77,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         ws.send(
           JSON.stringify({
             type: 'PRODUCT_CHANGED',
-            batchId: message.batchId,
-            updatedCommitted: message.updatedCommitted,
+            product: message,
           }),
         );
       })
