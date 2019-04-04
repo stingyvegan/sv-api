@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       requiredUnits: DataTypes.SMALLINT,
       totalCost: DataTypes.INTEGER,
       supplierId: DataTypes.UUID,
+      enabled: DataTypes.BOOLEAN,
     },
     {
       freezeTableName: true,

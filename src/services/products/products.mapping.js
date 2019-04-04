@@ -26,6 +26,7 @@ export function mapProduct(record) {
     unitName: record.unitName,
     requiredUnits: record.requiredUnits,
     totalCost: record.totalCost,
+    enabled: record.enabled,
     supplierId: record.Supplier.supplierId,
     supplierName: record.Supplier.name,
     totalCommitted,

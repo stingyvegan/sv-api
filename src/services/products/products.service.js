@@ -24,10 +24,17 @@ export async function getProduct(sc, productId) {
   }
 }
 
-export async function getProducts(sc) {
+export async function getProducts(sc, filters = {}) {
+  const { includeInactive = false } = filters;
+
+  const where = {
+    ...(!includeInactive && { enabled: true }),
+  };
+
   if (await rbac.can(sc.roles, 'products:get:active')) {
     const records = await Product.findAll({
       include: productIncludes,
+      where,
     });
     return records.map(r => mapProduct(r));
   } else {
