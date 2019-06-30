@@ -1,11 +1,11 @@
 import amqp from 'amqplib';
 
 let connection = undefined;
+let channel = undefined;
 
 export default {
   publish: async (exchange, routingKey, payload) => {
     try {
-      const channel = await connection.createChannel();
       channel.assertExchange(exchange, 'topic', { durable: false });
       channel.publish(
         exchange,
@@ -19,7 +19,6 @@ export default {
     }
   },
   listen: async (exchange, routingKey, onMessage, onClose) => {
-    const channel = await connection.createChannel();
     channel.assertExchange(exchange, 'topic', { durable: false });
     const queue = await channel.assertQueue('', { exclusive: true });
     channel.bindQueue(queue.queue, exchange, routingKey);
@@ -34,7 +33,6 @@ export default {
     return queue.queue;
   },
   cancelListen: async queue => {
-    const channel = await connection.createChannel();
     channel.deleteQueue(queue);
   },
   configureRabbitMQ: async () => {
@@ -44,5 +42,15 @@ export default {
     console.log(`Connecting to RabbitMQ @ ${rabbitUrl}`); // eslint-disable-line no-console
     connection = await amqp.connect(rabbitUrl);
     console.log('Connection to RabbitMQ established successfully'); // eslint-disable-line no-console
+    channel = await connection.createChannel();
+    console.log('RabbitMQ channel opened'); // eslint-disable-line no-console
+  },
+  disconnectRabbitMQ: async () => {
+    try {
+      await connection.close();
+      console.log('RabbitMQ connection closed successfully'); // eslint-disable-line no-console
+    } catch (e) {
+      console.log('Error closing RabbitMQ connection and/or channel', e); // eslint-disable-line no-console
+    }
   },
 };

@@ -97,3 +97,13 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
   .catch(e => {
     console.error(e);
   });
+
+function exitHandler() {
+  console.log('Application attempting to shut down gracefully.');
+  mq.disconnectRabbitMQ().then(() => {
+    process.exit(0);
+  });
+}
+
+process.on('SIGTERM', exitHandler);
+process.on('SIGINT', exitHandler);
