@@ -23,20 +23,8 @@ module.exports = {
       supplier_id: honestToGoodness.supplier_id,
     };
 
-    const nutritionalYeastBatch = {
-      batch_id: uuid(),
-      created_at: new Date(),
-      updated_at: new Date(),
-      product_id: nutritionalYeast.product_id,
-    };
-
     await queryInterface.bulkInsert('supplier', [honestToGoodness], {});
-    await queryInterface.bulkInsert('product', [nutritionalYeast], {});
-    return await queryInterface.bulkInsert(
-      'batch',
-      [nutritionalYeastBatch],
-      {},
-    );
+    return queryInterface.bulkInsert('product', [nutritionalYeast], {});
   },
 
   down: (queryInterface, Sequelize) => {},
