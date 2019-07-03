@@ -6,11 +6,7 @@ import addAuthenticatedRoute from './addAuthenticatedRoute';
 import mq from './rabbitmq';
 import configureSequelize from './configureSequelize';
 
-import {
-  addOrder,
-  getMyOrders,
-  getActiveOrders,
-} from './services/orders/orders.service';
+import { addOrder, getMyOrders, getActiveOrders } from './services/orders/orders.service';
 import { getProduct, getProducts } from './services/products/products.service';
 
 dotenv.config();
@@ -25,7 +21,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
   .then(() => {
     authenticatedRoute.get('/orders/my', (req, res, next) => {
       getMyOrders(res.locals.sc)
-        .then(orders => {
+        .then((orders) => {
           res.send(orders);
         })
         .catch(err => next(err));
@@ -33,7 +29,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
 
     authenticatedRoute.get('/orders', (req, res, next) => {
       getActiveOrders(res.locals.sc)
-        .then(orders => {
+        .then((orders) => {
           res.send(orders);
         })
         .catch(err => next(err));
@@ -41,7 +37,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
 
     authenticatedRoute.get('/products', (req, res, next) => {
       getProducts(res.locals.sc)
-        .then(products => {
+        .then((products) => {
           res.send(products);
         })
         .catch(err => next(err));
@@ -50,7 +46,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
     authenticatedRoute.get('/products/:productId', (req, res, next) => {
       const { productId } = req.params;
       getProduct(res.locals.sc, productId)
-        .then(product => {
+        .then((product) => {
           res.send(product);
         })
         .catch(err => next(err));
@@ -58,22 +54,22 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
 
     authenticatedRoute.put('/orders', (req, res, next) => {
       addOrder(res.locals.sc, req.body)
-        .then(createdOrder => {
+        .then((createdOrder) => {
           res.status(200);
           res.send(createdOrder);
         })
         .catch(err => next(err));
     });
 
-    authenticatedRoute.ws('/ws', function(ws, req) {
-      let queues = [];
+    authenticatedRoute.ws('/ws', (ws) => {
+      const queues = [];
       ws.on('close', () => {
-        queues.forEach(q => {
+        queues.forEach((q) => {
           mq.cancelListen(q);
         });
       });
 
-      mq.listen('product_updates', '', function(message) {
+      mq.listen('product_updates', '', (message) => {
         ws.send(
           JSON.stringify({
             type: 'PRODUCT_CHANGED',
@@ -81,10 +77,10 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
           }),
         );
       })
-        .then(function(q) {
+        .then((q) => {
           queues.push(q);
         })
-        .catch(e => {
+        .catch((e) => {
           // TODO some sort of error handling here.
           console.error(e);
         });
@@ -94,7 +90,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
       console.log(`Stingy Vegan listening on port ${port}`); // eslint-disable-line no-console
     });
   })
-  .catch(e => {
+  .catch((e) => {
     console.error(e);
   });
 

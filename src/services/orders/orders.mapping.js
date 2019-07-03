@@ -1,14 +1,10 @@
-const mapBatch = record => {
-  return {
-    batchId: record.batchId,
-    productId: record.productId,
-    totalCommitted: record.BatchOrders.reduce((acc, bo) => {
-      return acc + bo.committed;
-    }, 0),
-  };
-};
+const mapBatch = record => ({
+  batchId: record.batchId,
+  productId: record.productId,
+  totalCommitted: record.BatchOrders.reduce((acc, bo) => acc + bo.committed, 0),
+});
 
-const mapBatchOrder = record => {
+const mapBatchOrder = (record) => {
   const result = {
     committed: record.committed,
     batch: mapBatch(record.Batch),
@@ -21,7 +17,7 @@ const mapBatchOrder = record => {
  * Must have batch, product and supplier included.
  * @param {*} record The order record to be mapped.
  */
-export const mapOrder = record => {
+export default function mapOrder(record) {
   const result = {
     username: record.username,
     orderId: record.orderId,
@@ -29,4 +25,4 @@ export const mapOrder = record => {
     batchOrders: record.BatchOrders.map(mapBatchOrder),
   };
   return result;
-};
+}

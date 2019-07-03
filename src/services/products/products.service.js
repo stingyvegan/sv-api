@@ -1,8 +1,10 @@
 import rbac from '../../rbac';
-import { Batch, BatchOrder, Product, Supplier } from '../../../models';
-import { mapProduct } from './products.mapping';
+import {
+  Batch, BatchOrder, Product, Supplier,
+} from '../../../models';
+import mapProduct from './products.mapping';
 
-import { UnauthorisedError } from '../../errors';
+import errors from '../../errors';
 
 const productIncludes = [
   {
@@ -19,9 +21,8 @@ export async function getProduct(sc, productId) {
       include: productIncludes,
     });
     return mapProduct(record);
-  } else {
-    throw new UnauthorisedError();
   }
+  throw new errors.UnauthorisedError();
 }
 
 export async function getProducts(sc, filters = {}) {
@@ -37,7 +38,6 @@ export async function getProducts(sc, filters = {}) {
       where,
     });
     return records.map(r => mapProduct(r));
-  } else {
-    throw new UnauthorisedError();
   }
+  throw new errors.UnauthorisedError();
 }
