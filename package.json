@@ -20,6 +20,7 @@
   "dependencies": {
     "amqplib": "^0.5.3",
     "body-parser": "^1.19.0",
+    "bunyan": "^1.8.12",
     "cognito-express": "^2.0.15",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",

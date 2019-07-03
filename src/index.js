@@ -5,6 +5,7 @@ import { addMiddlewares, addErrorHandlers } from './middlewares';
 import addAuthenticatedRoute from './addAuthenticatedRoute';
 import mq from './rabbitmq';
 import configureSequelize from './configureSequelize';
+import logger from './logger';
 
 import { addOrder, getMyOrders, getActiveOrders } from './services/orders/orders.service';
 import { getProduct, getProducts } from './services/products/products.service';
@@ -82,20 +83,20 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         })
         .catch((e) => {
           // TODO some sort of error handling here.
-          console.error(e);
+          logger.error(e);
         });
     });
 
     app.listen(port, () => {
-      console.log(`Stingy Vegan listening on port ${port}`); // eslint-disable-line no-console
+      logger.info(`Stingy Vegan listening on port ${port}`);
     });
   })
   .catch((e) => {
-    console.error(e);
+    logger.error(e);
   });
 
 function exitHandler() {
-  console.log('Application attempting to shut down gracefully.');
+  logger.info('Application attempting to shut down gracefully.');
   mq.disconnectRabbitMQ().then(() => {
     process.exit(0);
   });
