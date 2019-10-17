@@ -7,15 +7,17 @@ npm ci
 npm start
 ```
 
+## Service Dependencies
+
+A docker compose file has been included for convenience. Start up the dependencies using `docker-compose up -d`.
+
 ## Initialise Database
 
-Exec into the mysql container and run the following commands:
-
+Exec into the mysql container using:
 ```
-CREATE DATABASE sv;
-CREATE USER 'sv'@'%' IDENTIFIED BY 'sv';
-GRANT ALL PRIVILEGES ON sv.* TO 'sv'@'%';
-```
+docker exec -it stingyvegan-api_mysql_1 mysql -p
+````
+enter the password `local` and run the sql commands found in `admin_scripts/seed.sql`.
 
 ## Run Migrations
 
