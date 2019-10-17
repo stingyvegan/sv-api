@@ -37,7 +37,7 @@ export async function getProducts(sc, filters = {}) {
       include: productIncludes,
       where,
     });
-    return records.map(r => mapProduct(r));
+    return records.map((r) => mapProduct(r));
   }
   throw new errors.UnauthorisedError();
 }
