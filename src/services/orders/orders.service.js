@@ -33,8 +33,8 @@ export async function addOrder(sc, newOrder) {
         { transaction: t },
       );
       const batchPromises = newOrder.batchOrders
-        .filter(bo => bo.existingCommitted === 0)
-        .map(bo => Batch.create(
+        .filter((bo) => bo.existingCommitted === 0)
+        .map((bo) => Batch.create(
           {
             batchId: bo.batchId,
             productId: newOrder.productId,
@@ -45,7 +45,7 @@ export async function addOrder(sc, newOrder) {
 
       // Add the batchOrder records
       return Promise.all(
-        newOrder.batchOrders.map(bo => BatchOrder.create(
+        newOrder.batchOrders.map((bo) => BatchOrder.create(
           {
             batchId: bo.batchId,
             orderId: newOrder.orderId,

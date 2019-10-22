@@ -9,7 +9,7 @@ function sumCommitted(batchOrders) {
  */
 export default function mapProduct(record) {
   const currentBatch = record.Batches.find(
-    batch => sumCommitted(batch.BatchOrders) < record.requiredUnits,
+    (batch) => sumCommitted(batch.BatchOrders) < record.requiredUnits,
   );
 
   const totalCommitted = currentBatch ? sumCommitted(currentBatch.BatchOrders) : 0;
