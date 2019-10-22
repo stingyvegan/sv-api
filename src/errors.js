@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 class Error {
   constructor(type, message) {
     this.type = type;

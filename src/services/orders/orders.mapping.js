@@ -1,4 +1,4 @@
-const mapBatch = record => ({
+const mapBatch = (record) => ({
   batchId: record.batchId,
   productId: record.productId,
   totalCommitted: record.BatchOrders.reduce((acc, bo) => acc + bo.committed, 0),

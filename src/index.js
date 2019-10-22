@@ -25,7 +25,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         .then((orders) => {
           res.send(orders);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     });
 
     authenticatedRoute.get('/orders', (req, res, next) => {
@@ -33,7 +33,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         .then((orders) => {
           res.send(orders);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     });
 
     authenticatedRoute.get('/products', (req, res, next) => {
@@ -41,7 +41,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         .then((products) => {
           res.send(products);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     });
 
     authenticatedRoute.get('/products/:productId', (req, res, next) => {
@@ -50,7 +50,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
         .then((product) => {
           res.send(product);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     });
 
     authenticatedRoute.put('/orders', (req, res, next) => {
@@ -59,7 +59,7 @@ Promise.all([mq.configureRabbitMQ(), configureSequelize()])
           res.status(200);
           res.send(createdOrder);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     });
 
     authenticatedRoute.ws('/ws', (ws) => {
