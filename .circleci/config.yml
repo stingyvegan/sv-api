@@ -3,15 +3,22 @@ jobs:
   build:
     machine: true
     steps:
-      - run: |
-          echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME $DOCKER_REGISTRY_URL --password-stdin
       - checkout
-      - run: |
-          REGISTRY=$(echo $DOCKER_REGISTRY_URL/$DOCKER_USERNAME/stingyvegan-api/stingyvegan-api)
-          echo $REGISTRY
-          TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
-          echo $TAG
-      - run: |
-          docker build -t $REGISTRY:$TAG .
-      - run: |
-          docker push $REGISTRY:$TAG
+      - run:
+          name: Setup Environment Variables
+          command: |
+            REGISTRY=$(echo $DOCKER_REGISTRY_URL/$DOCKER_USERNAME/stingyvegan-api/stingyvegan-api)
+            echo $REGISTRY
+            echo "export REGISTRY=$REGISTRY" >> $BASH_ENV
+            TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
+            echo $TAG
+            echo "export TAG=$TAG" >> $BASH_ENV
+      - run:
+          name: Run Docker Build
+          command: |
+            docker build -t $REGISTRY:$TAG .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME $DOCKER_REGISTRY_URL --password-stdin
+            docker push $REGISTRY:$TAG
