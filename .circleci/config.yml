@@ -7,5 +7,6 @@ jobs:
           echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME $DOCKER_REGISTRY_URL --password-stdin
       - checkout
       - run: |
-          TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
+          TAG=$DOCKER_REGISTRY_URL/$DOCKER_USERNAME/stingyvegan-api/stingyvegan-api:$(echo $CIRCLE_SHA1 | cut -c -7)
+          echo $TAG
           docker build -t stingyvegan:$TAG .
