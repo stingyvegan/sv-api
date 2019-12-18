@@ -21,7 +21,7 @@ jobs:
             REGISTRY=$(echo $DOCKER_REGISTRY_URL/$DOCKER_USERNAME/$REGISTRY_REPO/stingyvegan-api)
             echo $REGISTRY
             echo "export REGISTRY=$REGISTRY" >> $BASH_ENV
-            TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
+            TAG=${TAG:-`echo $CIRCLE_SHA1 | cut -c -7`}
             echo $TAG
             echo "export TAG=$TAG" >> $BASH_ENV
       - run:
@@ -39,6 +39,20 @@ workflows:
   test:
     jobs:
       - test
-      - docker-build:
+      - docker-build-prod:
           requires:
             - test
+          filters:
+            branches:
+              only:
+                - master
+          context: production
+      - docker-build-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - staging
+          context: staging
+
