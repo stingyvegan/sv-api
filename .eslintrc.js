@@ -4,4 +4,7 @@ module.exports = {
     'no-var': 1,
     'arrow-body-style': 2,
   },
+  env: {
+    jest: true
+  }
 };
