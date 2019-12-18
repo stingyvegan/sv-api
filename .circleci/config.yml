@@ -36,7 +36,7 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  ci:
     jobs:
       - test
       - docker-build:
