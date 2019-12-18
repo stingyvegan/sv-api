@@ -39,7 +39,7 @@ workflows:
   test:
     jobs:
       - test
-      - docker-build-prod:
+      - docker-build:
           requires:
             - test
           filters:
@@ -47,7 +47,7 @@ workflows:
               only:
                 - master
           context: production
-      - docker-build-staging:
+      - docker-build:
           requires:
             - test
           filters:
