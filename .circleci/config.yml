@@ -1,6 +1,17 @@
 version: 2.1
 jobs:
-  build:
+  test:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: |
+            npm ci
+            npm t
+
+  docker-build:
     machine: true
     steps:
       - checkout
@@ -22,3 +33,9 @@ jobs:
           command: |
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME $DOCKER_REGISTRY_URL --password-stdin
             docker push $REGISTRY:$TAG
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
