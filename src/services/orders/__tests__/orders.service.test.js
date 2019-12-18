@@ -1,6 +1,6 @@
 describe('orders.service', () => {
   it('should run a test', () => {
-    const expected = 3;
+    const expected = 2;
 
     const actual = 1 + 2;
 
