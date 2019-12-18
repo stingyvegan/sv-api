@@ -8,7 +8,7 @@
     "lint": "npx eslint src",
     "start": "nodemon --exec babel-node src/index.js",
     "serve": "npx sequelize db:migrate && node lib/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -18,30 +18,33 @@
   "license": "UNLICENSED",
   "homepage": "https://bitbucket.org/stingyvegan/stingyvegan-api#readme",
   "dependencies": {
-    "amqplib": "^0.5.3",
-    "body-parser": "^1.18.3",
-    "cognito-express": "^2.0.14",
+    "amqplib": "^0.5.5",
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.12",
+    "cognito-express": "^2.0.16",
     "cors": "^2.8.5",
-    "dotenv": "^7.0.0",
+    "dotenv": "^8.2.0",
     "easy-rbac": "^3.1.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "mysql2": "^1.6.5",
-    "sequelize": "^5.2.11",
-    "sequelize-cli": "^5.4.0",
-    "uuid": "^3.3.2"
+    "mysql2": "^2.0.2",
+    "sequelize": "^5.21.3",
+    "sequelize-cli": "^5.5.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.3",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "nodemon": "^1.18.10"
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@types/jest": "^24.0.23",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2"
   }
 }

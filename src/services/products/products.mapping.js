@@ -1,7 +1,5 @@
 function sumCommitted(batchOrders) {
-  return batchOrders.reduce((acc, bo) => {
-    return acc + bo.committed;
-  }, 0);
+  return batchOrders.reduce((acc, bo) => acc + bo.committed, 0);
 }
 
 /**
@@ -9,14 +7,12 @@ function sumCommitted(batchOrders) {
  * Must have Product and Orders included.
  * @param {*} record The Batch record to be mapped.
  */
-export function mapProduct(record) {
-  const currentBatch = record.Batches.find(batch => {
-    return sumCommitted(batch.BatchOrders) < record.requiredUnits;
-  });
+export default function mapProduct(record) {
+  const currentBatch = record.Batches.find(
+    (batch) => sumCommitted(batch.BatchOrders) < record.requiredUnits,
+  );
 
-  const totalCommitted = currentBatch
-    ? sumCommitted(currentBatch.BatchOrders)
-    : 0;
+  const totalCommitted = currentBatch ? sumCommitted(currentBatch.BatchOrders) : 0;
 
   return {
     name: record.name,

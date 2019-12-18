@@ -1,11 +1,13 @@
 import rbac from '../../rbac';
-import { BatchOrder, Batch, Order, sequelize } from '../../../models';
-import { mapOrder } from './orders.mapping';
+import {
+  BatchOrder, Batch, Order, sequelize,
+} from '../../../models';
+import mapOrder from './orders.mapping';
 import mq from '../../rabbitmq';
 
 import * as productService from '../products/products.service';
 
-import { UnauthorisedError } from '../../errors';
+import errors from '../../errors';
 
 const orderInclude = [
   {
@@ -21,7 +23,7 @@ const orderInclude = [
 
 export async function addOrder(sc, newOrder) {
   if (await rbac.can(sc.roles, 'orders:order:my')) {
-    await sequelize.transaction(async t => {
+    await sequelize.transaction(async (t) => {
       // Add the order and any new batches
       const orderPromise = Order.create(
         {
@@ -31,30 +33,26 @@ export async function addOrder(sc, newOrder) {
         { transaction: t },
       );
       const batchPromises = newOrder.batchOrders
-        .filter(bo => bo.existingCommitted === 0)
-        .map(bo =>
-          Batch.create(
-            {
-              batchId: bo.batchId,
-              productId: newOrder.productId,
-            },
-            { transaction: t },
-          ),
-        );
+        .filter((bo) => bo.existingCommitted === 0)
+        .map((bo) => Batch.create(
+          {
+            batchId: bo.batchId,
+            productId: newOrder.productId,
+          },
+          { transaction: t },
+        ));
       await Promise.all([orderPromise, ...batchPromises]);
 
       // Add the batchOrder records
-      return await Promise.all(
-        newOrder.batchOrders.map(bo =>
-          BatchOrder.create(
-            {
-              batchId: bo.batchId,
-              orderId: newOrder.orderId,
-              committed: bo.committed,
-            },
-            { transaction: t },
-          ),
-        ),
+      return Promise.all(
+        newOrder.batchOrders.map((bo) => BatchOrder.create(
+          {
+            batchId: bo.batchId,
+            orderId: newOrder.orderId,
+            committed: bo.committed,
+          },
+          { transaction: t },
+        )),
       );
     });
 
@@ -68,9 +66,8 @@ export async function addOrder(sc, newOrder) {
     });
     const mapped = mapOrder(createdOrder);
     return mapped;
-  } else {
-    throw new UnauthorisedError();
   }
+  throw new errors.UnauthorisedError();
 }
 
 export async function getMyOrders(sc) {
@@ -83,9 +80,8 @@ export async function getMyOrders(sc) {
       order: [['created_at', 'DESC']],
     });
     return orders.map(mapOrder);
-  } else {
-    throw new UnauthorisedError();
   }
+  throw new errors.UnauthorisedError();
 }
 
 export async function getActiveOrders(sc) {
@@ -95,7 +91,6 @@ export async function getActiveOrders(sc) {
       order: [['created_at', 'DESC']],
     });
     return orders.map(mapOrder);
-  } else {
-    throw new UnauthorisedError();
   }
+  throw new errors.UnauthorisedError();
 }

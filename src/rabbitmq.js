@@ -1,20 +1,17 @@
 import amqp from 'amqplib';
+import logger from './logger';
 
-let connection = undefined;
-let channel = undefined;
+let connection;
+let channel;
 
 export default {
   publish: async (exchange, routingKey, payload) => {
     try {
       channel.assertExchange(exchange, 'topic', { durable: false });
-      channel.publish(
-        exchange,
-        routingKey,
-        new Buffer(JSON.stringify(payload)),
-      );
+      channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(payload)));
       return true;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return false;
     }
   },
@@ -22,35 +19,33 @@ export default {
     channel.assertExchange(exchange, 'topic', { durable: false });
     const queue = await channel.assertQueue('', { exclusive: true });
     channel.bindQueue(queue.queue, exchange, routingKey);
-    channel.consume(queue.queue, function(message) {
+    channel.consume(queue.queue, (message) => {
       if (message) {
         const data = JSON.parse(message.content.toString());
         onMessage(data);
-      } else {
-        if (onClose) onClose();
-      }
+      } else if (onClose) onClose();
     });
     return queue.queue;
   },
-  cancelListen: async queue => {
+  cancelListen: async (queue) => {
     channel.deleteQueue(queue);
   },
   configureRabbitMQ: async () => {
     const rabbitUrl = `amqp://${process.env.RABBIT_MQ_USER}:${
       process.env.RABBIT_MQ_PASS
     }@${process.env.RABBIT_MQ_HOST}:${process.env.RABBIT_MQ_PORT}`;
-    console.log(`Connecting to RabbitMQ @ ${rabbitUrl}`); // eslint-disable-line no-console
+    logger.info(`Connecting to RabbitMQ @ ${rabbitUrl}`);
     connection = await amqp.connect(rabbitUrl);
-    console.log('Connection to RabbitMQ established successfully'); // eslint-disable-line no-console
+    logger.info('Connection to RabbitMQ established successfully');
     channel = await connection.createChannel();
-    console.log('RabbitMQ channel opened'); // eslint-disable-line no-console
+    logger.info('RabbitMQ channel opened');
   },
   disconnectRabbitMQ: async () => {
     try {
       await connection.close();
-      console.log('RabbitMQ connection closed successfully'); // eslint-disable-line no-console
+      logger.info('RabbitMQ connection closed successfully');
     } catch (e) {
-      console.log('Error closing RabbitMQ connection and/or channel', e); // eslint-disable-line no-console
+      logger.info('Error closing RabbitMQ connection and/or channel', e);
     }
   },
 };

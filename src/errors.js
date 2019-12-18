@@ -1,16 +1,21 @@
+/* eslint-disable max-classes-per-file */
 class Error {
   constructor(type, message) {
     this.type = type;
     this.message = message || '';
+  }
 
-    this.toString = function() {
-      return `${this.type}${this.message ? ` ${this.message}` : ''}`;
-    };
+  toString() {
+    return `${this.type}${this.message ? ` ${this.message}` : ''}`;
   }
 }
 
-export class UnauthorisedError extends Error {
+class UnauthorisedError extends Error {
   constructor(message) {
     super('Unauthorised', message);
   }
 }
+
+export default {
+  UnauthorisedError,
+};

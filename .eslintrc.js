@@ -2,6 +2,9 @@ module.exports = {
   extends: 'airbnb-base',
   rules: {
     'no-var': 1,
-    'arrow-body-style': 'always',
+    'arrow-body-style': 2,
   },
+  env: {
+    jest: true
+  }
 };
