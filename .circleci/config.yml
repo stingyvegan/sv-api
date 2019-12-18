@@ -1,0 +1,58 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: |
+            npm ci
+            npm t
+
+  docker-build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Environment Variables
+          command: |
+            REGISTRY=$(echo $DOCKER_REGISTRY_URL/$DOCKER_USERNAME/$REGISTRY_REPO/stingyvegan-api)
+            echo $REGISTRY
+            echo "export REGISTRY=$REGISTRY" >> $BASH_ENV
+            TAG=${TAG:-`echo $CIRCLE_SHA1 | cut -c -7`}
+            echo $TAG
+            echo "export TAG=$TAG" >> $BASH_ENV
+      - run:
+          name: Run Docker Build
+          command: |
+            docker build -t $REGISTRY:$TAG .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME $DOCKER_REGISTRY_URL --password-stdin
+            docker push $REGISTRY:$TAG
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+      - docker-build:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+          context: production
+      - docker-build:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - staging
+          context: staging
+
