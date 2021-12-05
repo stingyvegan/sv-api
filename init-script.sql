@@ -1,0 +1,4 @@
+CREATE USER IF NOT EXISTS 'sv' @'%' IDENTIFIED BY 'sv';
+ALTER USER 'sv' @'%' IDENTIFIED WITH mysql_native_password BY 'sv';
+CREATE DATABASE IF NOT EXISTS sv CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+GRANT ALL PRIVILEGES ON sv.* TO 'sv' @'%';
