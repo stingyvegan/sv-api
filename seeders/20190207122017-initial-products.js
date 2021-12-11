@@ -1,25 +1,25 @@
 'use strict';
-const uuid = require('uuid/v4');
+const { v4 } = require('uuid');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const now = new Date();
     const honestToGoodness = {
       name: 'Honest To Goodness',
-      supplier_id: uuid(),
+      supplier_id: v4(),
       created_at: now,
       updated_at: now,
     };
     const veganPerfection = {
       name: 'Vegan Perfection',
-      supplier_id: uuid(),
+      supplier_id: v4(),
       created_at: now,
       updated_at: now,
     };
 
     const nutritionalYeast = {
       name: 'Nutritional Yeast',
-      product_id: uuid(),
+      product_id: v4(),
       created_at: now,
       updated_at: now,
       is_discrete: false,
@@ -31,7 +31,7 @@ module.exports = {
     };
     const beyondBurger = {
       name: 'The Beyond Burger',
-      product_id: uuid(),
+      product_id: v4(),
       created_at: now,
       updated_at: now,
       is_discrete: true,
@@ -43,7 +43,7 @@ module.exports = {
     };
     const vegoBar = {
       name: '150g Vego Hazelnut Choc Bar',
-      product_id: uuid(),
+      product_id: v4(),
       created_at: now,
       updated_at: now,
       is_discrete: true,
