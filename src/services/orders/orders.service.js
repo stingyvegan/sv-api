@@ -88,7 +88,7 @@ export async function getActiveOrders(sc) {
   if (await rbac.can(sc.roles, 'orders:get:active')) {
     const orders = await Order.findAll({
       include: orderInclude,
-      order: [['created_at', 'DESC']],
+      order: [['created_at', 'DESC'], ['batch_id', 'DESC']],
     });
     return orders.map(mapOrder);
   }
