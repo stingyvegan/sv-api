@@ -19,7 +19,7 @@
   "homepage": "https://bitbucket.org/stingyvegan/stingyvegan-api#readme",
   "dependencies": {
     "amqplib": "^0.8.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.19.1",
     "bunyan": "^1.8.12",
     "cognito-express": "^2.0.16",
     "cors": "^2.8.5",
