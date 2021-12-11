@@ -1,6 +1,6 @@
 {
   "name": "stingyvegan-api",
-  "version": "0.1.0",
+  "version": "0.1.1-package-upgrade.0",
   "description": "Backend rest/websocket server for Stingy Vegan web application",
   "main": "src/index.js",
   "scripts": {
@@ -19,32 +19,30 @@
   "homepage": "https://bitbucket.org/stingyvegan/stingyvegan-api#readme",
   "dependencies": {
     "amqplib": "^0.8.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.19.1",
     "bunyan": "^1.8.12",
     "cognito-express": "^2.0.16",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
     "easy-rbac": "^3.1.0",
     "express": "^4.17.1",
-    "express-ws": "^4.0.0",
+    "express-ws": "^5.0.2",
     "mysql2": "^2.0.2",
     "sequelize": "^5.21.3",
     "sequelize-cli": "^5.5.1",
-    "uuid": "^3.3.3"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
-    "@types/jest": "^24.0.23",
-    "eslint": "^6.7.2",
-    "eslint-config-airbnb": "^18.0.1",
+    "@types/jest": "^27.0.3",
+    "eslint": "^8.4.1",
+    "eslint-config-airbnb": "^19.0.2",
     "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "jest": "^24.9.0",
+    "eslint-plugin-node": "^11.1.0",
+    "jest": "^27.4.4",
     "nodemon": "^2.0.2"
   }
 }
