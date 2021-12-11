@@ -1,13 +1,13 @@
 {
   "name": "stingyvegan-api",
-  "version": "0.0.1",
+  "version": "0.0.2-new-build.0",
   "description": "Backend rest/websocket server for Stingy Vegan web application",
   "main": "src/index.js",
   "scripts": {
-    "build": "npx babel src --out-dir lib",
+    "build": "npx babel src --out-dir dist",
     "lint": "npx eslint src",
     "start": "nodemon --exec babel-node src/index.js",
-    "serve": "npx sequelize db:migrate && node lib/index.js",
+    "serve": "npx sequelize db:migrate && node dist/index.js",
     "test": "jest"
   },
   "repository": {

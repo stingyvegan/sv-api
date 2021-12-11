@@ -1,21 +1,14 @@
-FROM node:16 AS build
-
-RUN mkdir -p /usr/build
-WORKDIR /usr/build
-COPY . .
-
-RUN npm ci
-RUN npm run build
-
 FROM node:16-alpine
 
 RUN mkdir -p /usr/dist
 WORKDIR /usr/dist
-COPY --from=build /usr/build/lib ./lib
-COPY --from=build /usr/build/node_modules ./node_modules
-COPY --from=build /usr/build/config ./config
-COPY --from=build /usr/build/models ./models
-COPY --from=build /usr/build/migrations ./migrations
-COPY --from=build /usr/build/seeders ./seeders
+COPY ./dist ./dist
+COPY ./package.json ./
+COPY ./package-lock.json ./
+COPY ./config ./config
+COPY ./models ./models
+COPY ./migrations ./migrations
 
-CMD ["sh", "-c", "node node_modules/.bin/sequelize db:migrate && node lib/index.js"]
+RUN npm ci --production
+
+CMD ["sh", "-c", "node node_modules/.bin/sequelize db:migrate && node dist/index.js"]
