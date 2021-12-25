@@ -29,21 +29,19 @@ module.exports = {
       },
     });
     const orders = await queryInterface.sequelize.query(
-      'SELECT order_id, batch_id, committed, created_at, updated_at from `order`;',
-      { type: Sequelize.QueryTypes.SELECT }
+      'SELECT order_id, batch_id, committed, created_at, updated_at from "order";',
+      { type: Sequelize.QueryTypes.SELECT },
     );
     if (orders.length > 0) {
       await queryInterface.bulkInsert(
         'batch_order',
-        orders[0].map(o => {
-          return {
-            batch_id: o.batch_id,
-            order_id: o.order_id,
-            committed: o.committed,
-            created_at: o.created_at,
-            updated_at: o.updated_at,
-          };
-        }),
+        orders[0].map((o) => ({
+          batch_id: o.batch_id,
+          order_id: o.order_id,
+          committed: o.committed,
+          created_at: o.created_at,
+          updated_at: o.updated_at,
+        })),
       );
     }
     await queryInterface.removeColumn('order', 'batch_id');
@@ -64,9 +62,7 @@ module.exports = {
     );
     for (let i = 0; i < links[0].length; i++) {
       const link = links[0][i];
-      const query = `UPDATE \`order\` SET batch_id = '${
-        link.batch_id
-        }', committed = ${link.committed} WHERE order_id = '${link.order_id}';`;
+      const query = `UPDATE "order" SET batch_id = '${link.batch_id}', committed = ${link.committed} WHERE order_id = '${link.order_id}';`;
       await queryInterface.sequelize.query(query);
     }
     return queryInterface.dropTable('batch_order');
