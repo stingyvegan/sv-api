@@ -1,6 +1,6 @@
 env:
-  clientUri: "http://local.stingyvegan.com.au"
-  host: "api.local.stingyvegan.com.au"
+  clientUri: "http://local.stingyvegan.com"
+  host: "api.local.stingyvegan.com"
   port: 80
   dbName: sv
 
@@ -10,7 +10,7 @@ cognito:
 
 image:
   registry: ghcr.io/stingyvegan/sv-api
-  version: v0.2.0
+  version: v0.3.0-postgres.0
   registrySecretName: registry-github-stingyvegan
 
 gateway:

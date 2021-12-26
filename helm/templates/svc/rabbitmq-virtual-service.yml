@@ -5,7 +5,7 @@ metadata:
   name: stingyvegan-rabbit-virtual-service
 spec:
   hosts:
-    - "rabbit.stingyvegan.com.au"
+    - "rabbit.stingyvegan.com"
   gateways:
     - stingyvegan-gateway
   http:
