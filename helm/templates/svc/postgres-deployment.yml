@@ -1,0 +1,45 @@
+{{- if eq .Values.postgres.include true }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-postgres
+  namespace: stingyvegan
+  labels:
+    app: {{ .Release.Name }}-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-postgres-configmap
+          ports:
+            - name: db-tcp
+              containerPort: {{ .Values.postgres.port | default 5432 }}
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-postgres-pvc
+            readOnly: false
+        - name: init-script
+          configMap:
+            name: {{ .Release.Name }}-postgres-init
+{{- end }}

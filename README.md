@@ -46,3 +46,23 @@ Following that you can perform the docker build and try and run the container. (
 docker build -t sv-api:latest .
 docker run --env-file=.env -p 4000:4000 sv-api:latest
 ```
+
+# Helm
+
+A helm chart is provided for convenience deploying the stingyvegan api to kubernetes.
+
+## Requirements
+
+- RabbitMQ Operator Installed
+
+## Installing
+
+```sh
+
+```
+
+## Running Local Dev
+
+```sh
+helm install sv-api ./helm --dry-run --set gateway.include=true --set postgres.include=true --set rabbitmq.include=true
+```

@@ -1,0 +1,16 @@
+{{- if eq .Values.gateway.include true }}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Release.Name }}-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ required "A valid value for env.host must be provided" .Values.env.host | quote }}
+{{- end }}

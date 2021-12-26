@@ -1,3 +1,10 @@
+{{- if eq .Values.postgres.include true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-postgres-init
+data:
+  init-script.sql: |
     -- create db
     select pg_terminate_backend(pid) from pg_stat_activity where datname='template1';
     SELECT 'CREATE DATABASE sv'
@@ -14,3 +21,5 @@
     -- add search path
     alter user sv set search_path="$user",public,sv;
     alter user postgres set search_path="$user",public,sv;
+
+{{- end }}

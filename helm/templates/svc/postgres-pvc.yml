@@ -1,0 +1,13 @@
+{{- if eq .Values.postgres.include true }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: {{ .Values.postgres.requestedStorage | default "1Gi" }}
+{{- end }}

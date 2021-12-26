@@ -1,0 +1,40 @@
+env:
+  clientUri: "http://local.stingyvegan.com.au"
+  host: "api.local.stingyvegan.com.au"
+  port: 80
+  dbName: sv
+
+cognito:
+  region: ap-southeast-2
+  userPoolId: ap-southeast-2_zoRQDzN1a
+
+image:
+  registry: ghcr.io/stingyvegan/sv-api
+  version: v0.2.0
+  registrySecretName: registry-github-stingyvegan
+
+gateway:
+  include: false
+  # Only include if include is false
+  name: external-gateway
+
+rabbitmq:
+  include: false
+  # Only include these if include is false
+  host: rabbitmq
+  port: 5672
+  username: sv
+  password: sv
+  auth:
+    username: sv
+    password: sv
+
+postgres:
+  include: false
+  # Only include these if include is false
+  host: msql-svc
+  port: 5432
+  username: sv
+  password: sv
+  # Only include these if include is true
+  requestedStorage: 1Gi
