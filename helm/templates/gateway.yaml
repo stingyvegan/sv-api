@@ -13,4 +13,5 @@ spec:
         protocol: HTTP
       hosts:
         - {{ required "A valid value for env.host must be provided" .Values.env.host | quote }}
+        - {{ required "A valid value for rabbitmq.adminHost must be provided" .Values.rabbitmq.adminHost | quote }}
 {{- end }}

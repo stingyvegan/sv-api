@@ -25,6 +25,7 @@ rabbitmq:
   port: 5672
   username: sv
   password: sv
+  adminHost: rabbit.local.stingyvegan.com
   auth:
     username: sv
     password: sv
