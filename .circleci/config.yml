@@ -85,6 +85,34 @@ jobs:
             docker push $REGISTRY:$TAG
             docker push $REGISTRY:latest
 
+  publish-helm:
+    docker:
+      - image: hypnoglow/helm-s3:master-helm3.4
+    shell: /bin/sh -leo pipefail
+    environment:
+      - BASH_ENV: /etc/profile
+    steps:
+      - checkout
+      - run:
+          name: Setup Environment Variables
+          command: |
+            TAG="${CIRCLE_TAG:1}"
+            echo $TAG
+            echo "export TAG=$TAG" >> $BASH_ENV
+      - run:
+          name: Add Repo
+          command: |
+            helm repo add stingyvegan-s3 s3://helm.stingyvegan.com
+            helm repo list
+      - run:
+          name: Package Chart
+          command: |
+            helm package ./helm --version=$TAG --app-version=$TAG
+      - run:
+          name: Publish Chart
+          command: |
+            helm s3 push --relative ./sv-api-$TAG.tgz stingyvegan-s3
+
 workflows:
   version: 2
   ci:
@@ -113,3 +141,13 @@ workflows:
             branches:
               ignore: /.*/
           context: stingyvegan-github
+
+      - publish-helm:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /v([0-9])*.([0-9])*.([0-9])*.*/
+            branches:
+              ignore: /.*/
+          context: s3-helm-deploy
