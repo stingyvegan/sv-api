@@ -100,9 +100,10 @@ jobs:
             echo $TAG
             echo "export TAG=$TAG" >> $BASH_ENV
       - run:
-          name: Add Repo
+          name: Add Repos
           command: |
             helm repo add stingyvegan-s3 s3://helm.stingyvegan.com
+            helm repo add bitnami https://charts.bitnami.com/bitnami
             helm repo list
       - run:
           name: Package Chart
