@@ -14,28 +14,22 @@ image:
   registrySecretName: registry-github-stingyvegan
 
 gateway:
-  include: false
-  # Only include if include is false
-  name: external-gateway
+  include: true
+  # name: external-gateway # Provide if include is false
 
 rabbitmq:
-  include: false
-  # Only include these if include is false
-  host: rabbitmq
-  port: 5672
-  username: sv
-  password: sv
+  include: true
+  # host: myHost # Provide if include is false
   adminHost: rabbit.local.stingyvegan.com
   auth:
     username: sv
     password: sv
+  serviceAccount:
+    create: false
 
 postgres:
-  include: false
-  # Only include these if include is false
-  host: msql-svc
-  port: 5432
+  include: true
+  # host: myHost # Provide if include is false
   username: sv
   password: sv
-  # Only include these if include is true
-  requestedStorage: 1Gi
+  requestedStorage: 1Gi # Provide if include is true

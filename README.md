@@ -70,5 +70,8 @@ helm uninstall -n stingyvegan api
 ## Running Local Dev
 
 ```sh
-helm install sv-api ./helm --dry-run --set gateway.include=true --set postgres.include=true --set rabbitmq.include=true
+# Install (uses build in gateway, postgres & rabbit)
+helm install -n stingyvegan sv-api ./helm
+# Uninstall
+helm uninstall -n stingyvegan sv-api
 ```
