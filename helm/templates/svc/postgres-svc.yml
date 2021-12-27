@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-postgres-svc
+  name: {{ .Release.Name }}-api-postgres-svc
 spec:
   selector:
-    app: {{ .Release.Name }}-postgres
+    app: {{ .Release.Name }}-api-postgres
   ports:
     - name: db-tcp
       port: {{ .Values.postgres.port | default 5432 }}
