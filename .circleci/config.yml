@@ -107,6 +107,7 @@ jobs:
       - run:
           name: Package Chart
           command: |
+            helm dependency build ./helm
             helm package ./helm --version=$TAG --app-version=$TAG
       - run:
           name: Publish Chart

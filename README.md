@@ -58,7 +58,12 @@ A helm chart is provided for convenience deploying the stingyvegan api to kubern
 ## Installing
 
 ```sh
-
+# Add repo if not already added
+helm repo add stingyvegan https://helm.stingyvegan.com
+# Install chart to `stingyvegan` namespace
+helm install -n stingyvegan api stingyvegan/sv-api
+# Uninstall chart
+helm uninstall -n stingyvegan api
 ```
 
 ## Running Local Dev
