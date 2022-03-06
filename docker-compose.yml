@@ -9,13 +9,14 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: sv
       RABBITMQ_DEFAULT_PASS: sv
-  mysql:
-    container_name: sv-mysql
-    image: mysql:latest
+  postgres:
+    container_name: sv-postgres
+    image: postgres
     ports:
-      - 3306:3306
-    command: --default-authentication-plugin=mysql_native_password
+      - 5432:5432
     environment:
-      MYSQL_ROOT_PASSWORD: local
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=local
     volumes:
       - ./init-script.sql:/docker-entrypoint-initdb.d/init-script.sql
