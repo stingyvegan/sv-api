@@ -12,7 +12,7 @@ export default function addAuthenticatedRoute(app) {
 
   const authenticatedRoute = express.Router();
   app.use('/api', authenticatedRoute);
-  authenticatedRoute.use((req, res, next) => {
+  authenticatedRoute.use(async (req, res, next) => {
     let accessTokenFromClient = '';
     if (req.headers.authorization) {
       accessTokenFromClient = req.headers.authorization.replace('Bearer ', '');
@@ -20,17 +20,16 @@ export default function addAuthenticatedRoute(app) {
       accessTokenFromClient = req.query.Authorization.replace('Bearer ', '');
     }
 
-    cognitoExpress.validate(accessTokenFromClient, (err, response) => {
-      if (err) {
-        return res.status(401).send(err);
-      }
-
+    try {
+      const result = await cognitoExpress.validate(accessTokenFromClient);
       res.locals.sc = {
-        username: response.username,
-        roles: cognitoHelpers.getRoles(response),
+        username: result.username,
+        roles: cognitoHelpers.getRoles(result),
       };
       return next();
-    });
+    } catch (err) {
+      return res.status(401).send(err);
+    }
   });
 
   return authenticatedRoute;
