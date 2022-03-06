@@ -1,6 +1,6 @@
 {
   "name": "stingyvegan-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Backend rest/websocket server for Stingy Vegan web application",
   "main": "src/index.js",
   "scripts": {
