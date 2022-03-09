@@ -53,7 +53,15 @@ A helm chart is provided for convenience deploying the stingyvegan api to kubern
 
 ## Requirements
 
-- RabbitMQ Operator Installed
+- Docker pull secret created
+    ```
+    kubectl create secret docker-registry registry-github-stingyvegan \
+      --docker-server=ghcr.io \
+      --docker-username=danielemery \
+      --docker-password=${PASSWORD_FROM_BITWARDEN} \
+      --docker-email=danielremery@gmail.com \
+      --namespace stingyvegan
+    ```
 
 ## Installing
 

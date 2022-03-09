@@ -1,35 +1,25 @@
 env:
-  clientUri: "http://local.stingyvegan.com"
-  host: "api.local.stingyvegan.com"
+  clientUri: "http://stingyvegan.com"
+  host: "api.stingyvegan.com"
   port: 80
-  dbName: sv
+  dbName: stingyvegan
 
 cognito:
   region: ap-southeast-2
-  userPoolId: ap-southeast-2_zoRQDzN1a
+  userPoolId: ap-southeast-2_IpPHSYAIZ
 
 image:
   registry: ghcr.io/stingyvegan/sv-api
-  version: v0.3.0-postgres.0
+  version: v0.3.1
   registrySecretName: registry-github-stingyvegan
 
-gateway:
-  include: true
-  # name: external-gateway # Provide if include is false
-
 rabbitmq:
-  include: true
-  # host: myHost # Provide if include is false
-  adminHost: rabbit.local.stingyvegan.com
+  host: localhost:5672
   auth:
     username: sv
     password: sv
-  serviceAccount:
-    create: false
 
 postgres:
-  include: true
-  # host: myHost # Provide if include is false
+  host: localhost:5432
   username: sv
   password: sv
-  requestedStorage: 1Gi # Provide if include is true

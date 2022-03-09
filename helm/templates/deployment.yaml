@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-api
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.Name }}-api
+    app: {{ .Release.Name }}
 spec:
   progressDeadlineSeconds: 60
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-api
+      app: {{ .Release.Name }}
   replicas: 1
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-api
+        app: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Release.Name }}-api
+        - name: {{ .Release.Name }}
           image: {{ .Values.image.registry }}:{{ .Values.image.version }}
           imagePullPolicy: Always
           resources:
@@ -32,6 +32,6 @@ spec:
               value: {{ .Values.image.version }}
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-api-configmap
+                name: {{ .Release.Name }}-configmap
       imagePullSecrets:
         - name: {{ .Values.image.registrySecretName }}
