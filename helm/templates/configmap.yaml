@@ -19,3 +19,5 @@ data:
   POSTGRES_USER: {{ .Values.postgres.username | default "sv" }}
   POSTGRES_PASS: {{ .Values.postgres.password | default "sv" }}
   POSTGRES_DB: {{ .Values.env.dbName | default "sv" }}
+  POSTGRES_REQUIRE_SSL: {{ .Values.postgres.ssl | default "false" }}
+  
