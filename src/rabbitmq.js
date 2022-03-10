@@ -8,7 +8,11 @@ export default {
   publish: async (exchange, routingKey, payload) => {
     try {
       channel.assertExchange(exchange, 'topic', { durable: false });
-      channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(payload)));
+      channel.publish(
+        exchange,
+        routingKey,
+        Buffer.from(JSON.stringify(payload)),
+      );
       return true;
     } catch (err) {
       logger.error(err);
@@ -31,11 +35,15 @@ export default {
     channel.deleteQueue(queue);
   },
   configureRabbitMQ: async () => {
-    const rabbitUrl = `amqp://${process.env.RABBIT_MQ_USER}:${
-      process.env.RABBIT_MQ_PASS
-    }@${process.env.RABBIT_MQ_HOST}:${process.env.RABBIT_MQ_PORT}`;
+    const rabbitUrl = `amqp://${process.env.RABBIT_MQ_USER}:***@${process.env.RABBIT_MQ_HOST}:${process.env.RABBIT_MQ_PORT}`;
     logger.info(`Connecting to RabbitMQ @ ${rabbitUrl}`);
-    connection = await amqp.connect(rabbitUrl);
+    connection = await amqp.connect({
+      username: process.env.RABBIT_MQ_USER,
+      password: process.env.RABBIT_MQ_PASS,
+      hostname: process.env.RABBIT_MQ_HOST,
+      port: process.env.RABBIT_MQ_PORT,
+      protocol: 'amqp',
+    });
     logger.info('Connection to RabbitMQ established successfully');
     channel = await connection.createChannel();
     logger.info('RabbitMQ channel opened');
