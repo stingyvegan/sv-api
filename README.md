@@ -68,9 +68,8 @@ A helm chart is provided for convenience deploying the stingyvegan api to kubern
 ```sh
 # Add repo(s) if not already added
 helm repo add stingyvegan https://helm.stingyvegan.com
-helm repo add bitnami https://charts.bitnami.com/bitnami
 # Install chart to `stingyvegan` namespace
-helm install -n stingyvegan api stingyvegan/sv-api
+helm install -n stingyvegan api stingyvegan/sv-api -f helm/values.yaml
 # Uninstall chart
 helm uninstall -n stingyvegan api
 ```
