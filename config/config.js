@@ -15,6 +15,7 @@ const config = {
 if (process.env.POSTGRES_REQUIRE_SSL) {
   config.development.dialectOptions = {
     ssl: true,
+    rejectUnauthorized: false,
   };
 }
 
