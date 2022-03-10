@@ -10,7 +10,7 @@ cognito:
 
 image:
   registry: ghcr.io/stingyvegan/sv-api
-  version: v0.3.1
+  version: v0.3.2
   registrySecretName: registry-github-stingyvegan
 
 rabbitmq:
