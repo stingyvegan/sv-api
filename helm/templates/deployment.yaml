@@ -33,5 +33,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-configmap
-      imagePullSecrets:
-        - name: {{ .Values.image.registrySecretName }}

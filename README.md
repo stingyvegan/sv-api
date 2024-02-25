@@ -51,18 +51,6 @@ docker run --env-file=.env -p 4000:4000 sv-api:latest
 
 A helm chart is provided for convenience deploying the stingyvegan api to kubernetes.
 
-## Requirements
-
-- Docker pull secret created
-    ```
-    kubectl create secret docker-registry registry-github-stingyvegan \
-      --docker-server=ghcr.io \
-      --docker-username=danielemery \
-      --docker-password=${PASSWORD_FROM_BITWARDEN} \
-      --docker-email=danielremery@gmail.com \
-      --namespace stingyvegan
-    ```
-
 ## Installing
 
 ```sh
