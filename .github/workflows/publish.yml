@@ -10,8 +10,8 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 # Note this alone is not enough to give the action write access
-# In the registry settings https://github.com/users/danielemery/packages/container/quizlord-api/settings
-# you must also add the action with write access under Manage actions access
+# In the registry settings https://github.com/orgs/stingyvegan/packages/container/sv-api/settings
+# you must also add the repository with write access under Manage actions access
 permissions:
   packages: write
 
