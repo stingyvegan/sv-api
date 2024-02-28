@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}
-          image: {{ .Values.image.registry }}:{{ .Values.image.version }}
+          image: {{ .Values.api.registry }}:{{ .Values.api.version }}
           imagePullPolicy: Always
           resources:
             limits:
@@ -31,5 +31,5 @@ spec:
             - name: VERSION_TAG
               value: {{ .Values.image.version }}
           envFrom:
-            - configMapRef:
-                name: {{ .Release.Name }}-configmap
+            - secretRef:
+                name: {{ .Values.api.secretName }}
