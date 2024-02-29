@@ -6,6 +6,6 @@ spec:
   selector:
     app: {{ .Release.Name }}
   ports:
-    - port: {{ .Values.env.port }}
+    - port: 80
       name: http
       targetPort: 80

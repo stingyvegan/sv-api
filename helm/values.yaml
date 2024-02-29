@@ -1,27 +1,4 @@
-env:
-  clientUri: "http://stingyvegan.com"
-  host: "api.stingyvegan.com"
-  port: 80
-  dbName: stingyvegan
-
-cognito:
-  region: ap-southeast-2
-  userPoolId: ap-southeast-2_IpPHSYAIZ
-
-image:
+api:
   registry: ghcr.io/stingyvegan/sv-api
-  version: v0.3.3
-
-rabbitmq:
-  host: localhost
-  port: 5672
-  auth:
-    username: sv
-    password: sv
-
-postgres:
-  host: localhost
-  port: 5432
-  username: sv
-  password: sv
-  ssl: false
+  version: v0.0.0
+  secretName: stingyvegan-api
