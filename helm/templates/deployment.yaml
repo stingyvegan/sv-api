@@ -29,7 +29,7 @@ spec:
               containerPort: 80
           env:
             - name: VERSION_TAG
-              value: {{ .Values.image.version }}
+              value: {{ .Values.api.version }}
           envFrom:
             - secretRef:
                 name: {{ .Values.api.secretName }}
